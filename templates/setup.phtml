@@ -1,0 +1,87 @@
+
+<nav id="nav">
+	<ul class="container">
+		<li><a>BugSpray needs some information to get started</a></li>
+	</ul>
+</nav>
+
+<!-- Work -->
+<div class="wrapper style2">
+	<article id="work">
+		<header>
+			<h2>What BugSpray needs:</h2>
+			<p>MySQL connection and login information, project name and details,
+				and the details for the admin account.</p>
+		</header>
+
+		<form action="/setup/process" method="post" id="form">
+			<div class="container">
+				<div class="row">
+					<div class="4u 12u(mobile)">
+						<section class="box style1">
+							<h3>Admin Details</h3>
+							<setup> <label> <input type="text" name="adm_usern"
+								placeholder="Username">
+							</label> <label> <input type="password" name="adm_passw"
+								placeholder="Password">
+							</label> <label> <input type="text" name="adm_name"
+								placeholder="Name">
+							</label> </setup>
+						</section>
+					</div>
+						<div class="4u 12u(mobile)">
+							<section class="box style1">
+								<h3>MySQL</h3>
+								<setup> <label> <input type="text" name="sql_ip"
+									placeholder="IP Address">
+								</label> <label> <input type="text" name="sql_port"
+									placeholder="Port">
+								</label> <label> <input type="text" name="sql_user"
+									placeholder="Username">
+								</label> <label> <input type="password" name="sql_pass"
+									placeholder="Password">
+								</label> <label> <input type="text" name="sql_db"
+									placeholder="Database">
+								</label> <label> <input type="text" name="sql_tbp"
+									placeholder="Table Prefix">
+								</label> </setup>
+					
+					</section>
+				</div>
+				<div class="4u 12u(mobile)">
+					<section class="box style1">
+							<h3>Project Details</h3>
+							<setup> <label> <input type="text" name="pro_title"
+								placeholder="Title">
+							</label> <label> <input type="text" name="pro_subti"
+								placeholder="Subtitle">
+							</label> <label> <input type="text" name="pro_descr"
+								placeholder="Description">
+							</label> </setup>
+						
+					</section>
+				</div>
+				</form>
+					
+
+			</div>
+
+</div>
+<footer>
+	<button type="submit" class="button big scrolly" form="form">Submit</button>
+</footer>
+
+</article>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/skel.min.js"></script>
+<script src="assets/js/skel-viewport.min.js"></script>
+<script src="assets/js/util.js"></script>
+<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

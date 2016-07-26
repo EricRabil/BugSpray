@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<?php
+if(isset($data["title"])){
+	echo "<title>".$data["title"]."</title>";
+}else{
+	echo "<title>BugSpray</title>";
+}
+?>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--[if lte IE 8]><script src="./js/ie/html5shiv.js"></script><![endif]-->
+<link rel="stylesheet" href="./css/main.css" />
+<!--[if lte IE 8]><link rel="stylesheet" href="./css/ie8.css" /><![endif]-->
+<!--[if lte IE 9]><link rel="stylesheet" href="./css/ie9.css" /><![endif]-->
+
+    <?php foreach ($styles as $style): ?>
+    <link rel="stylesheet" href="<?php echo $style; ?>" />
+    <?php endforeach; ?>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <?php foreach ($scripts as $script): ?>
+    <script type="text/javascript" src="<?php echo $script; ?>"></script>
+    <?php endforeach; ?>
+</head>
+
+<body>
+
+
+<body>
+
+		<?php if(!$settings["runSetup"]){?>
+		<!-- Nav -->
+	<nav id="nav">
+		<ul class="container" >
+			<li><a href="#top">Projects</a></li>
+			<li><a href="#work">Thread Browser</a></li>
+			<li><a href="#portfolio">Direct Messages</a></li>
+			<li><a href="#contact">Settings</a></li>
+			<?php
+			if(!isset($_SESSION["valid"])){
+			?>
+			<li><form><login><input type="text" placeholder="Username / E-Mail"/><input type="password" placeholder="Password" /><a href="#work" class="button small scrolly" style="width: 125px; float:left; position: absolute; left:3" >Login</a></login></form></li>
+			<?php
+			}
+			?>
+		</ul>
+	</nav>
+			<?php }?>
+    <?php
+				$template = '../templates/' . $page;
+				
+				if (file_exists ( $template )) {
+					include '../templates/' . $template;
+				} else {
+					header ( 'Location: /?err=404' );
+				}
+				?>
+
+<script src="/js/bootstrap.js"></script>
+</body>
+</html>
