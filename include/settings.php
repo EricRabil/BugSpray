@@ -14,6 +14,13 @@ $config['general'] = array();
 $config['development'] = array();
 
 $config['security'] = array();
+  $config['security']['registration'] = array();
+    //Three types [Default 1]:
+    //1 = Open registration - Users can signup and automatically have activated accounts
+    //2 = Limited open registration - Users can signup but must be manually approved before
+    //having an activated account
+    //3 = Closed registration - Users cannot signup and must have an account made for them.
+    $config['security']['registration']['registrationType'] = 1;
 
 $config['db'] = array();
     $config['db']['username'] = "bugspray";
