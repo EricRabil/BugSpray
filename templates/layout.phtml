@@ -43,12 +43,22 @@ foreach ($styles as $style){
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <?php
-            $homeButtonDynamic = ($headerselect === "HS::Home") ? " class='active'>" : ">";
-            $homeButton = '<li'.$homeButtonDynamic.'<a href="/">Home</a></li>';
-            echo $homeButton;
-            $recentBugsButtonDynamic = ($headerselect === "HS::RecentBugs") ? " class='active'>" : ">";
-            $recentBugsButton = '<li'.$recentBugsButtonDynamic.'<a href="/bugs/recent">Recent Bugs</a></li>';
-            echo $recentBugsButton;
+            //Static buttons have priority over dynamic [For definition, see settings.]
+            foreach($config['pages']['layout.phtml']['navbar-static']['left'] as $name => $url){
+              $buttonDynamic = ($headerselect === $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
+              $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
+              echo $button;
+            }
+          ?>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <?php
+            //Static buttons have priority over dynamic [For definition, see settings.]
+            foreach($config['pages']['layout.phtml']['navbar-static']['right'] as $name => $url){
+              $buttonDynamic = ($headerselect === $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
+              $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
+              echo $button;
+            }
           ?>
         </ul>
       </div>

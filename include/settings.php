@@ -20,6 +20,27 @@ $config['db'] = array();
 
 //Controls variables for pages
 $config['pages'] = array();
+  $config['pages']['layout.phtml'] = array();
+
+    //Static means that the buttons will show in their position no matter if the user is
+    //logged in/out. Insert key/values here if you want to have extra buttons.
+
+    //WARNING: Due to the nature of the buttons, you cannot have two with the same key.
+    //If you need this, you must manually insert the button into ../templates/layout.phtml
+    //MAKE A BACKUP BEFORE MODIFYING TEMPLATES!
+
+    $config['pages']['layout.phtml']['navbar-static'] = array();
+      $config['pages']['layout.phtml']['navbar-static']['left'] = array();
+        $config['pages']['layout.phtml']['navbar-static']['left']['Home'] = '/';
+        $config['pages']['layout.phtml']['navbar-static']['left']['Recent Bugs'] = '/bugs/recent';
+
+      $config['pages']['layout.phtml']['navbar-static']['right'] = array();
+
+      //Key must match the static button array key and must exist - This is used to identify
+      //which button, if any, is tied to the current URL.
+      $config['pages']['layout.phtml']['navbar-static']['buttonHS'] = array();
+        $config['pages']['layout.phtml']['navbar-static']['buttonHS']['Home'] = 'HS::Home';
+        $config['pages']['layout.phtml']['navbar-static']['buttonHS']['Recent Bugs'] = 'HS::RecentBugs';
 
 //Advanced values/arrays that should only be tweaked by administrators that know what
 //they're doing!
