@@ -1,2 +1,2 @@
 # BugSpray
-Open-source bug tracking software using the Miniport HTML5 site template by HTML5UP
+Open-source bug tracking software which is 100% PHP based; it is built from the ground up to be extremely configurable 
