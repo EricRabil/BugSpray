@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<?php
+if($config['development']['broadcastVersion']){
+  echo '<!-- BugSpray '.$config['version'].'-->';
+}
+?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta charset="utf-8">
