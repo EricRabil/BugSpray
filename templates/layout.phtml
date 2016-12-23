@@ -69,15 +69,45 @@ foreach ($styles as $style){
               $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
               echo $button;
             }
+
+            //Check to make sure security level is at two or below, allows for user-submitted
+            //registrations.
+            if(!$config['security']['disableUserAuth']['disabled'] && $headerselect != $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$lang['page']['names']['login']] && !$_SESSION['user']['session_active']){
+              ?>
+              <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b><?php echo $lang['page']['names']['login']; ?></b> <span class="caret"></span></a>
+			<ul id="login-dp" class="dropdown-menu">
+				<li>
+					 <div class="row">
+							<div class="col-md-12">
+								 <form class="form" role="form" method="post" action=<?php echo '"'.$config['general']['host'].'/login/process"';?> accept-charset="UTF-8" id="login-nav">
+										<div class="form-group">
 											 <label class="sr-only" for="inputEmail"><?php echo $lang['email']; ?></label>
 											 <input type="email" class="form-control" id="inputEmail" placeholder=<?php echo '"'.$lang['email'].'"';?> required>
+										</div>
+										<div class="form-group">
 											 <label class="sr-only" for="inputPassword"><?php echo $lang['password']; ?></label>
 											 <input type="password" class="form-control" id="inputPassword" placeholder=<?php echo '"'.$lang['password'].'"';?> required>
                                              <div class="help-block text-right"><a href=""><?php echo $lang['login']['loginForm']['forgotPassword']; ?></a></div>
+										</div>
+										<div class="form-group">
 											 <button type="submit" class="btn btn-primary btn-block"><?php echo $lang['page']['names']['login']; ?></button>
+										</div>
+										<div class="checkbox">
+											 <label>
 											 <input type="checkbox"> <?php echo $lang['login']['loginForm']['rememberMe']; ?>
+											 </label>
+										</div>
+								 </form>
+							</div>
+							<div class="bottom text-center">
 								<?php echo $lang['login']['loginForm']['signupPlaintextHelper']; ?> <a href="#"><b><?php echo $lang['login']['loginForm']['signupAttrHyperlink']; ?></b></a>
+							</div>
+					 </div>
+				</li>
+
+              <?php
+            }
           ?>
         </ul>
       </div>
