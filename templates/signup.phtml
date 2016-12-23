@@ -9,6 +9,11 @@
         unset($_SESSION['pages']['signup']['error']);
         }
       ?>
+        <?php
+          echo '<form action="'.$config['general']['host'].'/signup/process" method="post" id="regForm">';
+        ?>
+        <div class="form-group col-lg-12">
+          <div class="input-group">
             <?php
               if(!isset($cpd)){
                 echo createInputField('fa fa-envelope', 'email', $lang['email'], 'inputEmail');
