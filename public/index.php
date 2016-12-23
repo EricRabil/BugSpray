@@ -4,7 +4,7 @@ error_reporting ( E_ALL | E_STRICT );
 require '../include/init.php';
 
 function render($page, $pageTitle, $context = array(), $styles = array(), $scripts = array(), $headerselect) {
-	global $config;
+	global $config, $lang;
 	$path = '../templates/' . $page;
 	$context ['headerSelect'] = $headerselect;
 	$context ['config'] = $config;
