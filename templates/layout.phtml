@@ -12,7 +12,7 @@ if($config['advanced']['useCDN']){
     $sri = (isset($config['advanced']['CDN']['CSS_SRI'][$name])) ? $config['advanced']['CDN']['CSS_SRI'][$name] : false;
 
     $link = '<link rel="stylesheet" href="'.$url.'"';
-    if($sri != false) $link .= ' integrity="'.$sri.'"';
+    if($sri != false) $link .= ' integrity="'.$sri.'" crossorigin="anonymous"';
     $link .= ' />';
     echo $link;
   }
@@ -22,8 +22,13 @@ if($config['advanced']['useCDN']){
     echo $link;
   }
 }
+if($config['general']['customCSS'] != false){
+  $link = '<link rel="stylesheet" href="'.$config['general']['customCSS'].'" />';
+  echo $link;
+}
 foreach ($styles as $style){
   $link = '<link rel="stylesheet" href="'.$style.'" />';
+  echo $link;
 }
 ?>
 
@@ -73,4 +78,28 @@ foreach ($styles as $style){
       </div>
     </div>
   </nav>
+  <?php
+  include '../templates/'.$page;
+
+  if($config['advanced']['useCDN']){
+    foreach ($config['advanced']['CDN']['JS'] as $name => $url){
+      $sri = (isset($config['advanced']['CDN']['JS_SRI'][$name])) ? $config['advanced']['CDN']['JS_SRI'][$name] : false;
+
+      $script = '<script type="text/javascript" src="'.$url.'"';
+      if($sri != false) $script .= ' integrity="'.$sri.'" crossorigin="anonymous"';
+      $script .= '></script>';
+      echo $script;
+    }
+  }else{
+    foreach ($config['advanced']['localResources']['JS'] as $url){
+      $script = '<script type="text/javascript" src="'.$url.'"></script>';
+      echo $script;
+    }
+  }
+  foreach ($scripts as $script){
+    $link = '<script type="text/javascript" src="'.$script.'"></script>';
+    echo $link;
+  }
+
+  ?>
 </body>
