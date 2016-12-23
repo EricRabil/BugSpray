@@ -1,6 +1,8 @@
 <?php
 $config = array();
 
+$config['version'] = '0.0.1 Indev';
+
 $config['general'] = array();
     $config['general']['host'] = "http://localhost";
 
@@ -10,8 +12,17 @@ $config['general'] = array();
     //This is more commonly used. Usage scenarios: Navbar, etc.
     $config['general']['niceName'] = "BugSpray";
 
+    //This CSS file is called after all other CSS files. It is used
+    //to build off of existing files. Set to false to disable or
+    //set to the URL of custom stylesheet.
+    $config['general']['customCSS'] = $config['general']['host'].'/css/addon.css';
+
 //Values used to make BugSpray more developer-friendly
 $config['development'] = array();
+  //This should be kept off unless you know what you're doing; Broadcasting your
+  //version could result in attackers taking advantage of your instance being
+  //outdated (if it is.)
+  $config['development']['broadcastVersion'] = true;
 
 $config['security'] = array();
   $config['security']['registration'] = array();
@@ -21,6 +32,20 @@ $config['security'] = array();
     //having an activated account
     //3 = Closed registration - Users cannot signup and must have an account made for them.
     $config['security']['registration']['registrationType'] = 1;
+
+  $config['security']['login'] = array();
+    //In seconds
+    $config['security']['login']['userLoginDeactivationTime'] = 5400;
+
+  //Setting disabled to true will result in the disappearance of login/signup elements
+  //on the website.
+
+  //The message must either be set to false or to a string. If set to false, there will be
+  //no error message on the login screen and it will simply be greyed out.
+  $config['security']['disableUserAuth'] = array(
+    'disabled' => false,
+    'message' => 'Logins are temporarily disabled while we resolve a security breach.'
+  );
 
 $config['db'] = array();
     $config['db']['username'] = "bugspray";
@@ -42,16 +67,17 @@ $config['pages'] = array();
 
     $config['pages']['layout.phtml']['navbar-static'] = array();
       $config['pages']['layout.phtml']['navbar-static']['left'] = array();
-        $config['pages']['layout.phtml']['navbar-static']['left']['Home'] = '/';
-        $config['pages']['layout.phtml']['navbar-static']['left']['Recent Bugs'] = '/bugs/recent';
+        $config['pages']['layout.phtml']['navbar-static']['left'][$lang['page']['names']['home']] = '/';
+        $config['pages']['layout.phtml']['navbar-static']['left'][$lang['page']['names']['recentbugs']] = '/bugs/recent';
 
       $config['pages']['layout.phtml']['navbar-static']['right'] = array();
 
       //Key must match the static button array key and must exist - This is used to identify
       //which button, if any, is tied to the current URL.
       $config['pages']['layout.phtml']['navbar-static']['buttonHS'] = array();
-        $config['pages']['layout.phtml']['navbar-static']['buttonHS']['Home'] = 'HS::Home';
-        $config['pages']['layout.phtml']['navbar-static']['buttonHS']['Recent Bugs'] = 'HS::RecentBugs';
+        $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$lang['page']['names']['home']] = 'HS::Home';
+        $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$lang['page']['names']['recentbugs']] = 'HS::RecentBugs';
+        $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$lang['page']['names']['login']] = 'HS::Login';
 
 //Advanced values/arrays that should only be tweaked by administrators that know what
 //they're doing!
@@ -70,6 +96,8 @@ $config['advanced'] = array();
     //If for whatever reason your CSS/JS resource does not have a SRI, remove or do not add it
     //to this array and it will not be SRI'd.
 
+    //Resources are called in the order they are entered. EX: JQuery is called before JSApi.
+
     $config['advanced']['CDN'] = array();
     $config['advanced']['CDN']['CSS'] = array();
       $config['advanced']['CDN']['CSS']['tether'] = "https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/css/tether.min.css";
@@ -83,9 +111,10 @@ $config['advanced'] = array();
       );
 
     $config['advanced']['CDN']['JS'] = array();
+
+      $config['advanced']['CDN']['JS']['jquery'] = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js";
       $config['advanced']['CDN']['JS']['bootstrap'] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
       $config['advanced']['CDN']['JS']['bootstrap-ie10'] = "https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js";
-      $config['advanced']['CDN']['JS']['jquery'] = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js";
       $config['advanced']['CDN']['JS']['jsapi'] = "https://www.google.com/jsapi";
 
       $config['advanced']['CDN']['JS_SRI'] = array(
@@ -98,14 +127,20 @@ $config['advanced'] = array();
     //If you have customized your file structure, make sure the changes reflect here if you
     //plan on using local resources instead of CDN.
 
+    //Resources are called in the order they are entered. EX: JQuery is called before JSApi.
+
     $config['advanced']['localResources'] = array();
-    $config['advanced']['localResources']['CSS'] = array();
-    $config['advanced']['localResources']['js'] = array();
-    $config['advanced']['localResources']['CSS']['bootstrap'] = $config['general']['host'].'/css/cyborg.css';
-    $config['advanced']['localResources']['CSS']['tether'] = $config['general']['host'].'/css/tether.css';
-    $config['advanced']['localResources']['CSS']['fontawesome'] = $config['general']['host'] . '/css/fontawesome.css';
-    $config['advanced']['localResources']['JS']['bootstrap'] = $config['general']['host'].'/js/bootstrap.js';
-    $config['advanced']['localResources']['JS']['bootstrap-ie10'] = $config['general']['host'] . '/js/ie10-viewport-bug-workaround.js';
-    $config['advanced']['localResources']['JS']['jquery'] = $config['general']['host'].'/js/jquery.js';
-    $config['advanced']['localResources']['JS']['jsapi'] = $config['general']['host'].'/js/jsapi.js';
+      $config['advanced']['localResources']['CSS'] = array();
+      $config['advanced']['localResources']['js'] = array();
+      $config['advanced']['localResources']['CSS']['bootstrap'] = $config['general']['host'].'/css/cyborg.css';
+      $config['advanced']['localResources']['CSS']['tether'] = $config['general']['host'].'/css/tether.css';
+      $config['advanced']['localResources']['CSS']['fontawesome'] = $config['general']['host'] . '/css/fontawesome.css';
+      $config['advanced']['localResources']['JS']['jquery'] = $config['general']['host'].'/js/jquery.js';
+      $config['advanced']['localResources']['JS']['bootstrap'] = $config['general']['host'].'/js/bootstrap.js';
+      $config['advanced']['localResources']['JS']['bootstrap-ie10'] = $config['general']['host'] . '/js/ie10-viewport-bug-workaround.js';
+      $config['advanced']['localResources']['JS']['jsapi'] = $config['general']['host'].'/js/jsapi.js';
+
+    //CPD == Carries Post Data
+    $config['advanced']['errorMaps'] = array();
+      $config['advanced']['errorMaps']['A03'] = 'CPD';
 ?>
