@@ -59,6 +59,15 @@ foreach ($styles as $style){
               $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
               echo $button;
             }
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b><?php echo $lang['page']['names']['login']; ?></b> <span class="caret"></span></a>
+											 <label class="sr-only" for="inputEmail"><?php echo $lang['email']; ?></label>
+											 <input type="email" class="form-control" id="inputEmail" placeholder=<?php echo '"'.$lang['email'].'"';?> required>
+											 <label class="sr-only" for="inputPassword"><?php echo $lang['password']; ?></label>
+											 <input type="password" class="form-control" id="inputPassword" placeholder=<?php echo '"'.$lang['password'].'"';?> required>
+                                             <div class="help-block text-right"><a href=""><?php echo $lang['login']['loginForm']['forgotPassword']; ?></a></div>
+											 <button type="submit" class="btn btn-primary btn-block"><?php echo $lang['page']['names']['login']; ?></button>
+											 <input type="checkbox"> <?php echo $lang['login']['loginForm']['rememberMe']; ?>
+								<?php echo $lang['login']['loginForm']['signupPlaintextHelper']; ?> <a href="#"><b><?php echo $lang['login']['loginForm']['signupAttrHyperlink']; ?></b></a>
           ?>
         </ul>
       </div>
