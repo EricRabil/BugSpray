@@ -1,4 +1,19 @@
+<div class="container-fluid">
+    <section class="container">
+		<div class="container-page">
+      <?php
+        if(isset($_SESSION['pages']['signup']['error'])){
+      ?>
+      <div clas="col-lg-12" style="padding-top: 10px">
+        <div class="panel panel-danger">
+          <div class="panel-heading">Registration Error <?php echo $_SESSION['pages']['signup']['error']; ?></div>
+          <div class="panel-body">
+            <?php
               echo $lang['errors'][$_SESSION['pages']['signup']['error']];
+            ?>
+          </div>
+        </div>
+      </div>
       <?php
         $cpd = (array_key_exists($_SESSION['pages']['signup']['error'], $config['advanced']['errorMaps']) && $config['advanced']['errorMaps'][$_SESSION['pages']['signup']['error']] == "CPD") ? true : null;
         if($cpd){
@@ -58,8 +73,19 @@
 					<input type="checkbox" class="checkbox" />
           <?php
           echo $lang['signup']['registrationForm']['notifyMe'];
+          ?>
+				</div>
+      </form>
+
+			</div>
+
+			<div class="col-md-6">
 				<h3 class="dark-grey"><?php echo $lang['signup']['titles']['tAndC']; ?></h3>
 				<?php
           echo $lang['signup']['tAndC'];
         ?>
 				<button type="submit" class="btn btn-primary" form="regForm"><?php echo $lang['signup']['registrationForm']['submit']; ?></button>
+			</div>
+		</div>
+	</section>
+</div>
