@@ -1,4 +1,21 @@
               echo $lang['errors'][$_SESSION['pages']['signup']['error']];
+      <?php
+        $cpd = (array_key_exists($_SESSION['pages']['signup']['error'], $config['advanced']['errorMaps']) && $config['advanced']['errorMaps'][$_SESSION['pages']['signup']['error']] == "CPD") ? true : null;
+        if($cpd){
+          $inputEmail = $_SESSION['pages']['signup']['error_fields']['inputEmail'];
+          $inputDisplayname = $_SESSION['pages']['signup']['error_fields']['inputDisplayname'];
+        }
+        unset($_SESSION['pages']['signup']['error_fields']);
+        unset($_SESSION['pages']['signup']['error']);
+        }
+      ?>
+            <?php
+              if(!isset($cpd)){
+                echo createInputField('fa fa-envelope', 'email', $lang['email'], 'inputEmail');
+              }else{
+                echo createInputFieldWithValue('fa fa-envelope', 'email', $lang['email'], $inputEmail, 'inputEmail');
+              }
+            ?>
           echo $lang['signup']['registrationForm']['notifyMe'];
 				<h3 class="dark-grey"><?php echo $lang['signup']['titles']['tAndC']; ?></h3>
 				<button type="submit" class="btn btn-primary" form="regForm"><?php echo $lang['signup']['registrationForm']['submit']; ?></button>
