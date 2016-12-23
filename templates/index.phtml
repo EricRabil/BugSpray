@@ -1,4 +1,22 @@
+<div class="container-fluid">
+  <section class="container">
+		<div class="container-page">
+      <?php
+        if(isset($_SESSION['pages']['index']['message'])){
+      ?>
+      <div clas="col-lg-12" style="padding-top: 10px">
+        <div class="panel panel-info">
           <div class="panel-heading"><?php echo $lang['messageTitles'][$_SESSION['pages']['index']['message']]; ?></div>
+          <div class="panel-body">
             <?php
               echo $lang['messages'][$_SESSION['pages']['index']['message']];
             ?>
+          </div>
+        </div>
+      </div>
+      <?php
+        }
+      ?>
+    </div>
+  </section>
+</div>
