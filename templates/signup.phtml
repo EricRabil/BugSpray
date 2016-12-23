@@ -23,6 +23,40 @@
                 echo createInputFieldWithValue('fa fa-envelope', 'email', $lang['email'], $inputEmail, 'inputEmail');
               }
             ?>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-12">
+          <div class="input-group">
+            <?php
+              if(!isset($cpd)){
+                echo createInputField('fa fa-user', 'text', $lang['signup']['registrationForm']['dnameLabel'], 'inputDisplayname');
+              }else{
+                echo createInputFieldWithValue('fa fa-user', 'text', $lang['signup']['registrationForm']['dnameLabel'], $inputDisplayname, 'inputDisplayname');
+              }
+            ?>
+          </div>
+        </div>
+
+				<div class="form-group col-lg-6">
+          <div class="input-group">
+            <?php
+              echo createInputField('fa fa-unlock-alt', 'password', $lang['password'], 'inputPassword');
+            ?>
+          </div>
+				</div>
+
+				<div class="form-group col-lg-6">
+          <div class="input-group">
+            <?php
+              echo createInputField('fa fa-unlock-alt', 'password', $lang['signup']['registrationForm']['pass2Label'], 'inputPasswordConfirm');
+            ?>
+          </div>
+				</div>
+
+				<div class="col-sm-6 pull-right">
+					<input type="checkbox" class="checkbox" />
+          <?php
           echo $lang['signup']['registrationForm']['notifyMe'];
 				<h3 class="dark-grey"><?php echo $lang['signup']['titles']['tAndC']; ?></h3>
 				<button type="submit" class="btn btn-primary" form="regForm"><?php echo $lang['signup']['registrationForm']['submit']; ?></button>
