@@ -28,5 +28,6 @@ if (! file_exists ( $page )) {
 	echo $page." not found";
 	exit ();
 }
+
 require $page;
 ?>
