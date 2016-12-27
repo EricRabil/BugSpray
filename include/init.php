@@ -1,4 +1,19 @@
 <?php
+header('Content-type: text/html; charset=utf8');
+require "settings_core.php";
+require "lang.php";
+require "settings.php";
+require "UUID.php";
+require "lib/htmlpurifier/HTMLPurifier.auto.php";
+require "../vendor/autoload.php";
+$pconfig = HTMLPurifier_Config::createDefault();
+$pconfig->set('URI.MakeAbsolute', true); // make all URLs absolute using the base URL set above
+$pconfig->set('AutoFormat.RemoveEmpty', true); // remove empty elements
+$pconfig->set('HTML.Doctype', 'XHTML 1.0 Strict'); // valid XML output (?)
+$pconfig->set('HTML.AllowedElements', array()); // remove all elements
+$pconfig->set('HTML.AllowedAttributes', array()); // remove all attributes except a.href
+$pconfig->set('CSS.AllowedProperties', array()); // remove all CSS
+$purifier = new HTMLPurifier($pconfig);
 ini_set('session.use_strict_mode', '1');
 ini_set('session.save_handler', 'files');
 ini_set('use_cookies', '1');
@@ -37,19 +52,6 @@ if(isset($_SESSION['user']) && $_SESSION['user']['session_active']){
 	$_SESSION['user'] = array('session_active' => false);
 }
 
-header('Content-type: text/html; charset=utf8');
-require "lang.php";
-require "settings.php";
-require "UUID.php";
-require "lib/htmlpurifier/HTMLPurifier.auto.php";
-$pconfig = HTMLPurifier_Config::createDefault();
-$pconfig->set('URI.MakeAbsolute', true); // make all URLs absolute using the base URL set above
-$pconfig->set('AutoFormat.RemoveEmpty', true); // remove empty elements
-$pconfig->set('HTML.Doctype', 'XHTML 1.0 Strict'); // valid XML output (?)
-$pconfig->set('HTML.AllowedElements', array()); // remove all elements
-$pconfig->set('HTML.AllowedAttributes', array()); // remove all attributes except a.href
-$pconfig->set('CSS.AllowedProperties', array()); // remove all CSS
-$purifier = new HTMLPurifier($pconfig);
 
 function cleanse($string){
 	global $purifier;
