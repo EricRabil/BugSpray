@@ -83,11 +83,11 @@ foreach ($styles as $style){
 								 <form class="form" role="form" method="post" action=<?php echo '"'.$config['general']['host'].'/login/process"';?> accept-charset="UTF-8" id="login-nav">
 										<div class="form-group">
 											 <label class="sr-only" for="inputEmail"><?php echo $lang['email']; ?></label>
-											 <input type="email" class="form-control" id="inputEmail" placeholder=<?php echo '"'.$lang['email'].'"';?> required>
+											 <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder=<?php echo '"'.$lang['email'].'"';?> required>
 										</div>
 										<div class="form-group">
 											 <label class="sr-only" for="inputPassword"><?php echo $lang['password']; ?></label>
-											 <input type="password" class="form-control" id="inputPassword" placeholder=<?php echo '"'.$lang['password'].'"';?> required>
+											 <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder=<?php echo '"'.$lang['password'].'"';?> required>
                                              <div class="help-block text-right"><a href=""><?php echo $lang['login']['loginForm']['forgotPassword']; ?></a></div>
 										</div>
 										<div class="form-group">
@@ -95,19 +95,32 @@ foreach ($styles as $style){
 										</div>
 										<div class="checkbox">
 											 <label>
-											 <input type="checkbox"> <?php echo $lang['login']['loginForm']['rememberMe']; ?>
+											 <input type="checkbox" name="rememberMe"> <?php echo $lang['login']['loginForm']['rememberMe']; ?>
 											 </label>
 										</div>
 								 </form>
 							</div>
 							<div class="bottom text-center">
-								<?php echo $lang['login']['loginForm']['signupPlaintextHelper']; ?> <a href="#"><b><?php echo $lang['login']['loginForm']['signupAttrHyperlink']; ?></b></a>
+								<?php echo $lang['login']['loginForm']['signupPlaintextHelper']; ?> <a href=<?php echo '"'.$config['general']['host'].'/signup"';?>><b><?php echo $lang['login']['loginForm']['signupAttrHyperlink']; ?></b></a>
 							</div>
 					 </div>
 				</li>
 
               <?php
-            }
+            }else{
+          ?>
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['user']['displayname']; ?><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href=<?php echo '"'.$config['general']['host'].'/logout"'; ?>><?php echo $lang['logout']; ?></a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+          <?php
+        }
           ?>
         </ul>
       </div>
