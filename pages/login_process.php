@@ -69,20 +69,17 @@ if(!isset($results['user_dname']) || !isset($results['user_rank'])){
 
 if($rememberMe){
   //Cookie data
-  $cookie = array();
-  $cookie['selector'] = UUID::generateUUID();
-  $cookie['validator'] = hash('sha256', $cookie['selector']);
+  $validator = hash('sha256', UUID::generateUUID());
   //Table data
-  $selector = $cookie['selector'];
   $expires = date('Y-m-d H:i:s', strtotime('+7 days'));
 
   //Insert
-  $sql = "INSERT INTO persistence_tokens (selector, validator, userid, expires) VALUES (?, ?, ?, ?)";
+  $sql = "INSERT INTO persistence_tokens (validator, userid, expires) VALUES (?, ?, ?)";
   $stmt = getConn()->prepare($sql);
-  $stmt->execute(array($selector, $selector.':'.$cookie['validator'], $userid, $expires));
+  $stmt->execute(array($validator, $userid, $expires));
 
   //Set
-  setcookie($config['security']['rememberMeCookieKey'], $cookie['selector'].':'.urldecode($cookie['validator']), strtotime('+7 days'), '/');
+  setcookie($config['security']['rememberMeCookieKey'], urldecode($validator), strtotime('+7 days'), '/');
 }
 
 //Activate user!

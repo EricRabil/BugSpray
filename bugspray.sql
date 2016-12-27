@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 27, 2016 at 05:48 PM
+-- Generation Time: Dec 27, 2016 at 06:23 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 7.0.13
 
@@ -28,7 +28,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `persistence_tokens` (
   `id` int(11) UNSIGNED NOT NULL,
-  `selector` char(64) NOT NULL,
   `validator` char(128) NOT NULL,
   `userid` int(11) UNSIGNED NOT NULL,
   `expires` datetime NOT NULL

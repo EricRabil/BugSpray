@@ -71,60 +71,61 @@ if(isset($_SESSION['user']) && $_SESSION['user']['session_active']){
 //RememberMe Checker
 //Based off of guide from https://paragonie.com/blog/2015/04/secure-authentication-php-with-long-term-persistence#title.2
 if(isset($_COOKIE[$config['security']['rememberMeCookieKey']])){
-  $rememberMeData = explode(':', $_COOKIE[$config['security']['rememberMeCookieKey']]);
-  $selector = $rememberMeData[0];
-  $validator = urldecode($rememberMeData[1]);
-  $sql = 'SELECT selector, validator, userid, expires FROM persistence_tokens WHERE selector = ?';
+  $validator = $_COOKIE[$config['security']['rememberMeCookieKey']];
+  $sql = 'SELECT validator, userid, expires FROM persistence_tokens WHERE validator = ?';
   $stmt = getConn()->prepare($sql);
-  $stmt->execute(array($selector));
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  $expiretime = strtotime($result['expires']);
-  if(time() > $expiretime){
-    setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-expiration", 1);
-    $sql = "DELETE FROM persistence_tokens WHERE selector = ?";
-    $stmt = getConn()->prepare($sql);
-    $stmt->execute(array($result['selector']));
-  }elseif(hash_equals($result['validator'], $result['selector'] . ':' . $validator)){
-    //RememberMe Validated; Delete and regenerate token
-    $sql = "DELETE FROM persistence_tokens WHERE selector = ?";
-    $stmt = getConn()->prepare($sql);
-    $stmt->execute(array($rememberMeData[0]));
-
-    $userid = $result['userid'];
-
-    //Get User
-
-    $sql = "SELECT user_email, user_dname, user_rank FROM users WHERE user_id = ?";
-    $stmt = getConn()->prepare($sql);
-    $stmt->execute(array($userid));
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $_SESSION['user'] = array(
-      'email' => $result['user_email'],
-      'displayname' => $result['user_dname'],
-      'rank' => $result['user_rank'],
-      'session_active' => true,
-      'login_activation_time' => time()
-    );
-
-    //Regenerate
-    $cookie = array('selector' => UUID::generateUUID());
-    $cookie['validator'] = hash('sha256', $validator);
-
-    //Table data
-    $selector = $cookie['selector'];
-    $expires = date('Y-m-d H:i:s', strtotime('+7 days'));
-
-    //Insert
-    $sql = "INSERT INTO persistence_tokens (selector, validator, userid, expires) VALUES (?, ?, ?, ?)";
-    $stmt = getConn()->prepare($sql);
-    $stmt->execute(array($selector, $selector.':'.$cookie['validator'], $userid, $expires));
-
-    //Set
-    setcookie($config['security']['rememberMeCookieKey'], $cookie['selector'].':'.$cookie['validator'], strtotime('+7 days'), '/');
-  }else{
-    //Unset cookie
+  $stmt->execute(array($validator));
+  if($stmt->rowCount() === 0){
+    //Unset cookie - Expired or invalid validator
     setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-server", 1);
+  }else{
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $expiretime = strtotime($result['expires']);
+    if(time() > $expiretime){
+      setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-expiration", 1);
+      $sql = "DELETE FROM persistence_tokens WHERE validator = ?";
+      $stmt = getConn()->prepare($sql);
+      $stmt->execute(array($result['validator']));
+    }elseif(hash_equals($result['validator'], $validator)){
+      //RememberMe Validated; Delete and regenerate token
+      $sql = "DELETE FROM persistence_tokens WHERE validator = ?";
+      $stmt = getConn()->prepare($sql);
+      $stmt->execute(array($_COOKIE[$config['security']['rememberMeCookieKey']]));
+
+      $userid = $result['userid'];
+
+      //Get User
+
+      $sql = "SELECT user_email, user_dname, user_rank FROM users WHERE user_id = ?";
+      $stmt = getConn()->prepare($sql);
+      $stmt->execute(array($userid));
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $_SESSION['user'] = array(
+        'email' => $result['user_email'],
+        'displayname' => $result['user_dname'],
+        'rank' => $result['user_rank'],
+        'session_active' => true,
+        'login_activation_time' => time()
+      );
+
+      //Regenerate
+      $newValidator = hash('sha256', UUID::generateUUID());
+
+      //Table data
+      $expires = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+      //Insert
+      $sql = "INSERT INTO persistence_tokens (validator, userid, expires) VALUES (?, ?, ?)";
+      $stmt = getConn()->prepare($sql);
+      $stmt->execute(array($newValidator, $userid, $expires));
+
+      //Set
+      setcookie($config['security']['rememberMeCookieKey'], $newValidator, strtotime('+7 days'), '/');
+    }else{
+      //Unset cookie
+      setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-server", 1);
+    }
   }
 }
 
