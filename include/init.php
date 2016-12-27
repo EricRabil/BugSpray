@@ -54,6 +54,7 @@ if($_SESSION['ctip']['creationTime'] < time() - 300){
 
 //User Login security
 if(isset($_SESSION['user']) && $_SESSION['user']['session_active']){
+  $user = $_SESSION['user'];
 	if($user['login_activation_time'] < time() - $config['security']['login']['userLoginDeactivationTime']){
 		//The user's login has timed out. Deactivate and remove all data from $_SESSION['user']
 		$_SESSION['pages']['login']['timeoutMessage'] = array('code' => 'B01', 'name' => $user['displayname']);
