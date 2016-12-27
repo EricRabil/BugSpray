@@ -68,10 +68,15 @@ if(isset($_SESSION['user']) && $_SESSION['user']['session_active']){
 	$_SESSION['user'] = array('session_active' => false);
 }
 
+function cleanse($string){
+	global $purifier;
+	return $purifier->purify($string);
+}
+
 //RememberMe Checker
 //Based off of guide from https://paragonie.com/blog/2015/04/secure-authentication-php-with-long-term-persistence#title.2
 if(isset($_COOKIE[$config['security']['rememberMeCookieKey']])){
-  $validator = $_COOKIE[$config['security']['rememberMeCookieKey']];
+  $validator = cleanse($_COOKIE[$config['security']['rememberMeCookieKey']]);
   $sql = 'SELECT validator, userid, expires FROM persistence_tokens WHERE validator = ?';
   $stmt = getConn()->prepare($sql);
   $stmt->execute(array($validator));
@@ -90,7 +95,7 @@ if(isset($_COOKIE[$config['security']['rememberMeCookieKey']])){
       //RememberMe Validated; Delete and regenerate token
       $sql = "DELETE FROM persistence_tokens WHERE validator = ?";
       $stmt = getConn()->prepare($sql);
-      $stmt->execute(array($_COOKIE[$config['security']['rememberMeCookieKey']]));
+      $stmt->execute(array(cleanse($_COOKIE[$config['security']['rememberMeCookieKey']])));
 
       $userid = $result['userid'];
 
@@ -127,11 +132,6 @@ if(isset($_COOKIE[$config['security']['rememberMeCookieKey']])){
       setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-server", 1);
     }
   }
-}
-
-function cleanse($string){
-	global $purifier;
-	return $purifier->purify($string);
 }
 
 function generateFatalError($title, $description, $extra, $scriptName) {
