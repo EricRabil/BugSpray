@@ -1,6 +1,4 @@
 <?php
-$config = array();
-
 $config['version'] = '0.0.1 Indev';
 
 $config['general'] = array();
@@ -23,29 +21,6 @@ $config['development'] = array();
   //version could result in attackers taking advantage of your instance being
   //outdated (if it is.)
   $config['development']['broadcastVersion'] = true;
-
-$config['security'] = array();
-  $config['security']['registration'] = array();
-    //Three types [Default 1]:
-    //1 = Open registration - Users can signup and automatically have activated accounts
-    //2 = Limited open registration - Users can signup but must be manually approved before
-    //having an activated account
-    //3 = Closed registration - Users cannot signup and must have an account made for them.
-    $config['security']['registration']['registrationType'] = 1;
-
-  $config['security']['login'] = array();
-    //In seconds
-    $config['security']['login']['userLoginDeactivationTime'] = 5400;
-
-  //Setting disabled to true will result in the disappearance of login/signup elements
-  //on the website.
-
-  //The message must either be set to false or to a string. If set to false, there will be
-  //no error message on the login screen and it will simply be greyed out.
-  $config['security']['disableUserAuth'] = array(
-    'disabled' => false,
-    'message' => 'Logins are temporarily disabled while we resolve a security breach.'
-  );
 
 $config['db'] = array();
     $config['db']['username'] = "bugspray";
