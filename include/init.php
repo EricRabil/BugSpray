@@ -68,6 +68,65 @@ if(isset($_SESSION['user']) && $_SESSION['user']['session_active']){
 	$_SESSION['user'] = array('session_active' => false);
 }
 
+//RememberMe Checker
+//Based off of guide from https://paragonie.com/blog/2015/04/secure-authentication-php-with-long-term-persistence#title.2
+if(isset($_COOKIE[$config['security']['rememberMeCookieKey']])){
+  $rememberMeData = explode(':', $_COOKIE[$config['security']['rememberMeCookieKey']]);
+  $selector = $rememberMeData[0];
+  $validator = urldecode($rememberMeData[1]);
+  $sql = 'SELECT selector, validator, userid, expires FROM persistence_tokens WHERE selector = ?';
+  $stmt = getConn()->prepare($sql);
+  $stmt->execute(array($selector));
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  if(hash_equals($result['validator'], $result['selector'] . ':' . $validator)){
+    echo "validated";
+    exit();
+    //RememberMe Validated; Delete and regenerate token
+    $sql = "DELETE FROM persistence_tokens WHERE selector = ?";
+    $stmt = getConn()->prepare($sql);
+    $stmt->execute(array($result['selector']));
+
+    $userid = $result['userid'];
+
+    //Get User
+
+    $sql = "SELECT user_displayname, user_rank FROM user WHERE user_id = ?";
+    $stmt = getConn()->prepare($sql);
+    $stmt->execute(array($userid));
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $_SESSION['user'] = array(
+      'email' => $email,
+      'displayname' => $results['user_displayname'],
+      'rank' => $results['user_rank'],
+      'session_active' => true,
+      'login_activation_time' => time()
+    );
+
+    //Regenerate
+    $cookie = array('selector' => UUID::generateUUID());
+    $cookie['validator'] = hash('sha-256', $validator, true);
+
+    //Table data
+    $selector = $cookie['selector'];
+    $expires = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+    //Insert
+    $sql = "INSERT INTO persistence_tokens (selector, validator, userid, expires) VALUES (?, ?, ?, ?)";
+    $stmt = getConn()->prepare($sql);
+    $stmt->execute(array($selector, $selector.':'.$cookie['validator'], $userid, $expires));
+
+    //Set
+    setcookie($config['security']['rememberMeCookieKey'], $cookie['selector'].':'.$cookie['validator'], strtotime('+7 days'), '/');
+  }else{
+    echo "invalidated<br>";
+    echo "server-side validator: ".$result['validator'].'<br>';
+    echo "client-side validator: ".$result['selector'] . ':' . $validator;
+    exit();
+    //Unset cookie
+    setcookie($config['security']['rememberMeCookieKey'], "invalidated-by-server", 1);
+  }
+}
 
 function cleanse($string){
 	global $purifier;
