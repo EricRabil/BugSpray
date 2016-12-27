@@ -133,19 +133,6 @@ function cleanse($string){
 	return $purifier->purify($string);
 }
 
-function getConn(){
-  global $config;
-  try {
-    $conn = new PDO ('mysql:dbname='.$config['db']['dbname'].';host='.$config['db']['ip'].';port='.$config['db']['port'], $config['db']['username'], $config['db']['password'], array(PDO::ATTR_PERSISTENT => TRUE));
-    $conn->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-		$conn->setAttribute ( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
-		$conn->exec ( "SET NAMES utf8" );
-		return $conn;
-  } catch (PDOException $e){
-    die($e);
-  }
-}
-
 function generateFatalError($title, $description, $extra, $scriptName) {
 	global $config;
 	echo "A fatal " . $title . " error has occured in " . $scriptName;
