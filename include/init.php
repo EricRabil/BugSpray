@@ -23,6 +23,21 @@ ini_set('session.hash_function', 'sha256');
 ini_set('session.hash_bits_per_character', '5');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+
+//Database function should always be the first application-code
+function getConn(){
+  global $config;
+  try {
+    $conn = new PDO ('mysql:dbname='.$config['db']['dbname'].';host='.$config['db']['ip'].';port='.$config['db']['port'], $config['db']['username'], $config['db']['password'], array(PDO::ATTR_PERSISTENT => TRUE));
+    $conn->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$conn->setAttribute ( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
+		$conn->exec ( "SET NAMES utf8" );
+		return $conn;
+  } catch (PDOException $e){
+    die($e);
+  }
+}
+
 session_start();
 //CTIP = Session protection information
 if (!isset($_SESSION['ctip'])) {
