@@ -12,11 +12,7 @@ if($config['security']['disableUserAuth']['disabled']){
 if($config['security']['registration']['registrationType'] == 3){
   //Terminate signup attempt; Registration (and only registration) is disabled.
   $_SESSION['pages']['signup']['error'] = 'A02';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
-  header('Location: '.$config['general']['host'].'/signup');
-  exit();
+  $errorOccured = true;
 }
 if($_SESSION['user']['session_active']){
   //Terminate signup attempt; User already logged in.
@@ -31,58 +27,34 @@ $passwordRating = $zxcvbn->passwordStrength($_POST['inputPassword'], $userDataFo
 $errorOccured = false;
 if($passwordRating < $config['security']['registration']['zxcvbnRequirement']){
   $_SESSION['pages']['signup']['error'] = 'A08';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if (strlen($_POST['inputPassword']) < $config['security']['registration']['minimumCharacters']){
   $_SESSION['pages']['signup']['error'] = 'A09';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if (strlen($_POST['inputPassword']) > 4096){
   $_SESSION['pages']['signup']['error'] = 'A10';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if(!validEmail($email)){
   $_SESSION['pages']['signup']['error'] = 'A04';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if(!$errorOccured && empty($displayname)){
   $_SESSION['pages']['signup']['error'] = 'A05';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if(!$errorOccured && empty($_POST['inputPassword'])){
   $_SESSION['pages']['signup']['error'] = 'A06';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if(!$errorOccured && empty($_POST['inputPasswordConfirm'])){
   $_SESSION['pages']['signup']['error'] = 'A06';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if(!$errorOccured && $_POST['inputPassword'] != $_POST['inputPasswordConfirm']){
   $_SESSION['pages']['signup']['error'] = 'A07';
-  $_SESSION['pages']['signup']['error_fields'] = array(
-    'inputEmail' => $email, 'inputDisplayname' => $displayname
-  );
   $errorOccured = true;
 }
 if($errorOccured){
