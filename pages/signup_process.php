@@ -1,4 +1,14 @@
 <?php
+if(empty($_POST)){
+  $_SESSION['pages']['signup']['error'] = 'A11';
+  header('Location: '.$config['general']['host'].'/signup');
+  exit();
+}
+if( !isset($_POST['inputEmail']) && !isset($_POST['inputPassword']) && !isset($_POST['inputDisplayname']) && !isset($_POST['inputPasswordConfirm']) && !empty($_POST)){
+  $_SESSION['pages']['signup']['error'] = '000';
+  header('Location: '.$config['general']['host'].'/signup');
+  exit();
+}
 use ZxcvbnPhp\Zxcvbn;
 if($config['security']['disableUserAuth']['disabled']){
   //Terminate signup attempt; Authentication systems are disabled.
@@ -23,6 +33,7 @@ $email = trim(cleanse($_POST['inputEmail']));
 $manualApproval = ($config['security']['registration']['registrationType'] == 2) ? 1 : 0;
 $displayname = trim(cleanse($_POST['inputDisplayname']));
 $userDataForSecComparison = array($email, $displayname);
+$zxcvbn = new Zxcvbn();
 $passwordRating = $zxcvbn->passwordStrength($_POST['inputPassword'], $userDataForSecComparison);
 $errorOccured = false;
 if($passwordRating < $config['security']['registration']['zxcvbnRequirement']){

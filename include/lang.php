@@ -9,11 +9,18 @@ $lang = array();
 
 $lang['lang'] = 'en_US';
 
-$lang['submitButton'] = 'Submit';
+$lang['submit_button'] = 'Submit';
 
 $lang['email'] = 'E-Mail';
 $lang['password'] = 'Password';
 $lang['logout'] = "Sign Out";
+
+$lang['navbar']['dropdown_logged_in'] = array(
+  'report_a_bug' => "Report a Bug",
+  'messages' => "Messages",
+  'admin_panel' => "Administration",
+  'preferences' => "Settings"
+);
 
 $lang['signup']['titles'] = array(
   'registration' => "Registration",
@@ -52,7 +59,7 @@ $lang['signup']['tAndC'] = <<<'EOT'
 EOT;
 
 $lang['page']['names'] = array(
-  'home' => "Home",
+  'home' => "Dashboard",
   'recentbugs' => "Recent Bugs",
   'login' => "Sign In"
 );
@@ -84,6 +91,8 @@ $lang['errors'] = array();
     $lang['errors']['A09'] = "Sorry! The password must be at least ".$config['security']['registration']['minimumCharacters']." characters long.";
     //Registration - The password's characters are longer than 4096 characters
     $lang['errors']['A10'] = "Hey there, you cryptographically-savy user! Your password is too secure - Please make it 4096 characters or lower.";
+    //Registration - No fields were posted. /signup/process was likely called manually.
+    $lang['errors']['A11'] = "Sorry! You must fill out the <b>entire</b> form.";
 
     //Login - The password is empty
     $lang['errors']['C01'] = $lang['errors']['A06'];
@@ -100,6 +109,11 @@ $lang['messages'] = array();
     //Registration - Registration (and only registration) is disabled
     $lang['messages']['A03'] = "Sorry, registration has been disabled.";
 
+    //General - Not authorized
+    $lang['messages']['001'] = "Sorry, you must be logged in and have the proper permissions to do that.";
+    //General - Not found
+    $lang['messages']['404'] = "Sorry, %s could not be found.";
+
 $lang['messageTitles'] = array();
     //Registration - Successful, awaiting manual approval
     $lang['messageTitles']['A01'] = "Registration submitted - Awaiting approval";
@@ -107,4 +121,7 @@ $lang['messageTitles'] = array();
     $lang['messageTitles']['A02'] = "Registration Successful!";
     //Registration - Registration (and only registration) is disabled
     $lang['messageTitles']['A03'] = "Registration Disabled";
+
+    //General - Not authorized
+    $lang['messageTitles']['001'] = "Not Authorized";
 ?>
