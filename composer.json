@@ -1,5 +1,0 @@
-{
-    "require": {
-        "bjeavons/zxcvbn-php": "^0.2.0"
-    }
-}

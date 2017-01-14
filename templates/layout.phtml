@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
-if($config['development']['broadcastVersion']){
-  echo '<!-- BugSpray '.$config['version'].'-->';
+if($this->steel->config['development']['broadcastVersion']){
+  echo '<!-- BugSpray '.$this->steel->config['version'].'-->';
 }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -12,23 +12,23 @@ if($config['development']['broadcastVersion']){
 <title><?php echo $pageTitle; ?></title>
 
 <?php
-if($config['advanced']['useCDN']){
-  foreach ($config['advanced']['CDN']['CSS'] as $name => $url){
-    $sri = (isset($config['advanced']['CDN']['CSS_SRI'][$name])) ? $config['advanced']['CDN']['CSS_SRI'][$name] : false;
+if($this->steel->config['advanced']['useCDN']){
+  foreach ($this->steel->config['advanced']['CDN']['CSS'] as $name => $url){
+    $sri = (isset($this->steel->config['advanced']['CDN']['CSS_SRI'][$name])) ? $this->steel->config['advanced']['CDN']['CSS_SRI'][$name] : false;
 
     $link = '<link rel="stylesheet" href="'.$url.'"';
-    if($sri != false) $link .= ' integrity="'.$sri.'" crossorigin="anonymous"';
+    if($sri != false){ $link .= ' integrity="'.$sri.'" crossorigin="anonymous"'; }
     $link .= ' />';
     echo $link;
   }
 }else{
-  foreach ($config['advanced']['localResources']['CSS'] as $url){
+  foreach ($this->steel->config['advanced']['localResources']['CSS'] as $url){
     $link = '<link rel="stylesheet" href="'.$url.'" />';
     echo $link;
   }
 }
-if($config['general']['customCSS'] != false){
-  $link = '<link rel="stylesheet" href="'.$config['general']['customCSS'].'" />';
+if($this->steel->config['general']['customCSS'] != false){
+  $link = '<link rel="stylesheet" href="'.$this->steel->config['general']['customCSS'].'" />';
   echo $link;
 }
 foreach ($styles as $style){
@@ -48,14 +48,14 @@ foreach ($styles as $style){
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/"><?php echo $config['general']['niceName']; ?></a>
+        <a class="navbar-brand" href="/"><?php echo $this->steel->config['general']['niceName']; ?></a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <?php
             //Static buttons have priority over dynamic [For definition, see settings.]
-            foreach($config['pages']['layout.phtml']['navbar-static']['left'] as $name => $url){
-              $buttonDynamic = ($headerselect === $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
+            foreach($this->steel->config['pages']['layout.phtml']['navbar-static']['left'] as $name => $url){
+              $buttonDynamic = ($this->headerselect === $this->steel->config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
               $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
               echo $button;
             }
@@ -64,44 +64,44 @@ foreach ($styles as $style){
         <ul class="nav navbar-nav navbar-right">
           <?php
             //Static buttons have priority over dynamic [For definition, see settings.]
-            foreach($config['pages']['layout.phtml']['navbar-static']['right'] as $name => $url){
-              $buttonDynamic = ($headerselect === $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
+            foreach($this->steel->config['pages']['layout.phtml']['navbar-static']['right'] as $name => $url){
+              $buttonDynamic = ($this->headerselect === $this->steel->config['pages']['layout.phtml']['navbar-static']['buttonHS'][$name]) ? " class='active'>" : ">";
               $button = '<li'.$buttonDynamic.'<a href="'.$url.'">'.$name.'</a></li>';
               echo $button;
             }
 
             //Check to make sure security level is at two or below, allows for user-submitted
             //registrations.
-            if(!$config['security']['disableUserAuth']['disabled'] && $headerselect != $config['pages']['layout.phtml']['navbar-static']['buttonHS'][$lang['page']['names']['login']] && !$_SESSION['user']['session_active']){
+            if(!$this->steel->config['security']['disableUserAuth']['disabled'] && $this->headerselect != 'HS::Login' && !$_SESSION['user']['session_active']){
               ?>
               <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b><?php echo $lang['page']['names']['login']; ?></b> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b><?php echo $this->steel->config['pages']['layout.phtml']['buttons']['login']; ?></b> <span class="caret"></span></a>
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
 							<div class="col-md-12">
-								 <form class="form" role="form" method="post" action=<?php echo '"'.$config['general']['host'].'/login/process"';?> accept-charset="UTF-8" id="login-nav">
+								 <form class="form" role="form" method="post" action=<?php echo '"'.$this->steel->config['general']['host'].'/login/process"';?> accept-charset="UTF-8" id="login-nav">
 										<div class="form-group">
-											 <label class="sr-only" for="inputEmail"><?php echo $lang['email']; ?></label>
-											 <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder=<?php echo '"'.$lang['email'].'"';?> required>
+											 <label class="sr-only" for="inputEmail">E-Mail</label>
+											 <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="E-Mail" required>
 										</div>
 										<div class="form-group">
-											 <label class="sr-only" for="inputPassword"><?php echo $lang['password']; ?></label>
-											 <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder=<?php echo '"'.$lang['password'].'"';?> required>
-                                             <div class="help-block text-right"><a href=""><?php echo $lang['login']['loginForm']['forgotPassword']; ?></a></div>
+											 <label class="sr-only" for="inputPassword">Password</label>
+											 <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password" required>
+                                             <div class="help-block text-right"><a href="">Forgot your password?</a></div>
 										</div>
 										<div class="form-group">
-											 <button type="submit" class="btn btn-primary btn-block"><?php echo $lang['page']['names']['login']; ?></button>
+											 <button type="submit" class="btn btn-primary btn-block">Login</button>
 										</div>
 										<div class="checkbox">
 											 <label>
-											 <input type="checkbox" name="rememberMe"> <?php echo $lang['login']['loginForm']['rememberMe']; ?>
+											 <input type="checkbox" name="rememberMe"> keep me signed in
 											 </label>
 										</div>
 								 </form>
 							</div>
 							<div class="bottom text-center">
-								<?php echo $lang['login']['loginForm']['signupPlaintextHelper']; ?> <a href=<?php echo '"'.$config['general']['host'].'/signup"';?>><b><?php echo $lang['login']['loginForm']['signupAttrHyperlink']; ?></b></a>
+								Need an account? <a href=<?php echo '"'.$this->steel->config['general']['host'].'/signup"';?>><b>Fill this form out.</b></a>
 							</div>
 					 </div>
 				</li>
@@ -112,8 +112,8 @@ foreach ($styles as $style){
           <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['user']['displayname']; ?><span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href=<?php echo '"'.$config['general']['host'].'/logout"'; ?>><?php echo $lang['logout']; ?></a></li>
-            <li><a href="#">Another action</a></li>
+            <li><a href=<?php echo '"'.$this->steel->config['general']['host'].'/logout"'; ?>>Sign Out</a></li>
+            <li><a href="#">Report a bug</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">Separated link</a></li>
@@ -129,17 +129,17 @@ foreach ($styles as $style){
   <?php
   include '../templates/'.$page;
 
-  if($config['advanced']['useCDN']){
-    foreach ($config['advanced']['CDN']['JS'] as $name => $url){
-      $sri = (isset($config['advanced']['CDN']['JS_SRI'][$name])) ? $config['advanced']['CDN']['JS_SRI'][$name] : false;
+  if($this->steel->config['advanced']['useCDN']){
+    foreach ($this->steel->config['advanced']['CDN']['JS'] as $name => $url){
+      $sri = (isset($this->steel->config['advanced']['CDN']['JS_SRI'][$name])) ? $this->steel->config['advanced']['CDN']['JS_SRI'][$name] : false;
 
       $script = '<script type="text/javascript" src="'.$url.'"';
-      if($sri != false) $script .= ' integrity="'.$sri.'" crossorigin="anonymous"';
+      if($sri != false){ $script .= ' integrity="'.$sri.'" crossorigin="anonymous"'; }
       $script .= '></script>';
       echo $script;
     }
   }else{
-    foreach ($config['advanced']['localResources']['JS'] as $url){
+    foreach ($this->steel->config['advanced']['localResources']['JS'] as $url){
       $script = '<script type="text/javascript" src="'.$url.'"></script>';
       echo $script;
     }

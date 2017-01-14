@@ -9,13 +9,13 @@
           <div class="panel-heading">Registration Error <?php echo $_SESSION['pages']['signup']['error']; ?></div>
           <div class="panel-body">
             <?php
-              echo $lang['errors'][$_SESSION['pages']['signup']['error']];
+              echo $this->steel->application->messages->get_error($_SESSION['pages']['signup']['error']);
             ?>
           </div>
         </div>
       </div>
       <?php
-        $cpd = (array_key_exists($_SESSION['pages']['signup']['error'], $config['advanced']['errorMaps']) && $config['advanced']['errorMaps'][$_SESSION['pages']['signup']['error']] == "CPD") ? true : null;
+        $cpd = (array_key_exists($_SESSION['pages']['signup']['error'], $this->steel->config['advanced']['errorMaps']) && $this->steel->config['advanced']['errorMaps'][$_SESSION['pages']['signup']['error']] == "CPD") ? true : null;
         if($cpd){
           $inputEmail = $_SESSION['pages']['signup']['error_fields']['inputEmail'];
           $inputDisplayname = $_SESSION['pages']['signup']['error_fields']['inputDisplayname'];
@@ -25,17 +25,17 @@
         }
       ?>
 			<div class="col-md-6">
-				<h3 class="dark-grey"><?php echo $lang['signup']['titles']['registration'];?></h3>
+				<h3 class="dark-grey">Registration</h3>
         <?php
-          echo '<form action="'.$config['general']['host'].'/signup/process" method="post" id="regForm">';
+          echo '<form action="'.$this->steel->config['general']['host'].'/signup/process" method="post" id="regForm">';
         ?>
         <div class="form-group col-lg-12">
           <div class="input-group">
             <?php
               if(!isset($cpd)){
-                echo createInputField('fa fa-envelope', 'email', $lang['email'], 'inputEmail');
+                echo $this->steel->application->create_input_field('fa fa-envelope', 'email', 'E-Mail', 'inputEmail');
               }else{
-                echo createInputFieldWithValue('fa fa-envelope', 'email', $lang['email'], $inputEmail, 'inputEmail');
+                echo $this->steel->application->create_input_field_with_value('fa fa-envelope', 'email', 'E-Mail', $inputEmail, 'inputEmail');
               }
             ?>
           </div>
@@ -45,9 +45,9 @@
           <div class="input-group">
             <?php
               if(!isset($cpd)){
-                echo createInputField('fa fa-user', 'text', $lang['signup']['registrationForm']['dnameLabel'], 'inputDisplayname');
+                echo $this->steel->application->create_input_field('fa fa-user', 'text', 'Display Name', 'inputDisplayname');
               }else{
-                echo createInputFieldWithValue('fa fa-user', 'text', $lang['signup']['registrationForm']['dnameLabel'], $inputDisplayname, 'inputDisplayname');
+                echo $this->steel->application->create_input_field_with_value('fa fa-user', 'text', 'Display Name', $inputDisplayname, 'inputDisplayname');
               }
             ?>
           </div>
@@ -56,7 +56,7 @@
 				<div class="form-group col-lg-6">
           <div class="input-group">
             <?php
-              echo createInputField('fa fa-unlock-alt', 'password', $lang['password'], 'inputPassword');
+              echo $this->steel->application->create_input_field('fa fa-unlock-alt', 'password', 'Password', 'inputPassword');
             ?>
           </div>
 				</div>
@@ -64,27 +64,37 @@
 				<div class="form-group col-lg-6">
           <div class="input-group">
             <?php
-              echo createInputField('fa fa-unlock-alt', 'password', $lang['signup']['registrationForm']['pass2Label'], 'inputPasswordConfirm');
+              echo $this->steel->application->create_input_field('fa fa-unlock-alt', 'password', 'Confirm Password', 'inputPasswordConfirm');
             ?>
           </div>
 				</div>
 
 				<div class="col-sm-6 pull-right">
-					<input type="checkbox" class="checkbox" />
-          <?php
-          echo $lang['signup']['registrationForm']['notifyMe'];
-          ?>
+					<input type="checkbox" class="checkbox" />Send notifications to this email
 				</div>
       </form>
 
 			</div>
 
 			<div class="col-md-6">
-				<h3 class="dark-grey"><?php echo $lang['signup']['titles']['tAndC']; ?></h3>
-				<?php
-          echo $lang['signup']['tAndC'];
-        ?>
-				<button type="submit" class="btn btn-primary" form="regForm"><?php echo $lang['signup']['registrationForm']['submit']; ?></button>
+                            <h3 class="dark-grey">
+                                  Terms and Conditions
+                            </h3><p>
+                                    By clicking on "Register" you agree to BugSpray's Terms and Conditions
+                                  </p>
+                                  <p>
+                                    BugSpray and its data is proprietary. Making a request for your data does not have to be filled.
+                                  </p>
+                                  <p>
+                                    Users are expected to be polite and listen to other users along with their complaints. The violation of this rule means you are subject to a suspension or termination, with no exceptions or explanations needed (although you may receive an e-mail explaining why.)
+                                  </p>
+                                  <p>
+                                    Circumvention of bans from BugSpray may result in the blacklisting of your IP altogether, or resulting in registrations requiring moderator approval.
+                                  </p>
+                                  <p>
+                                    BugSpray's terms may be updated without notice; it is your responsibility to check these terms regularly for changes. Failure to check the terms on your part does not result in an exemption of user discipline.
+                                  </p>
+				<button type="submit" class="btn btn-primary" form="regForm">Register</button>
 			</div>
 		</div>
 	</section>
